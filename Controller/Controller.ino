@@ -119,6 +119,8 @@ void loop(){
   for (int i = 0; i < CHANNEL_NUMBER; i++)
   {
     ppm[i] = channel_length[i];
+    // // alsternative read
+    ppm[i] = pulseIn(channel_pin[i]);
 
     //debugging
     Serial.print(ppm[i]);
