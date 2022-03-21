@@ -5,12 +5,14 @@
 
 //pwm reading stuff 
 #include <PinChangeInterrupt.h>
-const byte channel_pin[] = {2,3,4,5,6,7,8,9};
-volatile unsigned long rising_start[] = {0, 0, 0 ,0 ,0 ,0 ,0 ,0 ,0};
-volatile long channel_length[] = {0, 0, 0, 0, 0, 0, 0, 0};
+const byte channel_pin[] = {2,3,4,5,6};
+const byte channel_value[] = {0,0,0,0,0};
+
+volatile unsigned long rising_start[] = {0, 0, 0 ,0 ,0 };
+volatile long channel_length[] = {0, 0, 0, 0, 0};
 
 //////////////////////CONFIGURATION///////////////////////////////
-#define CHANNEL_NUMBER 8  //set the number of chanels
+#define CHANNEL_NUMBER 5  //set the number of chanels
 #define CHANNEL_DEFAULT_VALUE 1500  //set the default servo value
 #define FRAME_LENGTH 22500  //set the PPM frame length in microseconds (1ms = 1000µs)
 #define PULSE_LENGTH 300  //set the pulse length
@@ -32,8 +34,6 @@ void setup(){
   pinMode(channel_pin[3], INPUT);
   pinMode(channel_pin[4], INPUT);
   pinMode(channel_pin[5], INPUT);
-  pinMode(channel_pin[6], INPUT);
-  pinMode(channel_pin[7], INPUT);
 
   attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(channel_pin[0]), onRising0, CHANGE);
   attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(channel_pin[1]), onRising1, CHANGE);
@@ -41,8 +41,6 @@ void setup(){
   attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(channel_pin[3]), onRising2, CHANGE);
   attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(channel_pin[4]), onRising2, CHANGE);
   attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(channel_pin[5]), onRising2, CHANGE);
-  attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(channel_pin[6]), onRising2, CHANGE);
-  attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(channel_pin[7]), onRising2, CHANGE);
 
 
   //initiallize default ppm values
@@ -108,13 +106,8 @@ void onRising5(void) {
   processPin(5);
 }
 
-void onRising6(void) {
-  processPin(6);
-}
 
-void onRising7(void) {
-  processPin(7);
-}
+
 
 void loop(){
   
@@ -131,9 +124,15 @@ void loop(){
     Serial.print(ppm[i]);
     Serial.print(" | ");
   }
+  Serial.readln("  ");
   
   
 }
+
+
+
+
+
 
 ISR(TIMER1_COMPA_vect){  //leave this alone
   static boolean state = true;
