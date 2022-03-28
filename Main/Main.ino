@@ -12,6 +12,7 @@
 #define pwm3_pin A2
 #define pwm4_pin A3
 #define pwm5_pin A4
+int lastPwm[] = {0, 0, 0, 0, 0};
 
 void setup()
 {
@@ -52,6 +53,17 @@ int pwmRead(int pin)
         pwm = analogRead(pwm5_pin);
         break;
     }
+    //some basic smoothing
+    if (pwm > lastPwm[pin])
+    {
+        pwm = lastPwm[pin] + (pwm - lastPwm[pin]) / 2;
+    }
+    else
+    {
+        pwm = lastPwm[pin] - (lastPwm[pin] - pwm) / 2;
+    }
+    lastPwm[pin] = pwm;
+    //map to more readable range
     pwm = map(pwm, 1000, 2000, -255, 255);
     return pwm;
 }
