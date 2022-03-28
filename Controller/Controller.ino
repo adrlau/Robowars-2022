@@ -3,6 +3,11 @@
 * on https://code.google.com/p/generate-ppm-signal/ 
 */
 
+//motor pins
+const byte motor1Pin = 7;
+const byte motor1Pin = 8;
+const byte motorPwmPin = 9;
+
 //pwm reading stuff 
 #include <PinChangeInterrupt.h>
 const byte channel_pin[] = {2,3,4,5,6};
@@ -23,7 +28,12 @@ volatile long channel_length[] = {0, 0, 0, 0, 0};
 change theese values in your code (usually servo values move between 1000 and 2000)*/
 int ppm[CHANNEL_NUMBER];
 
-void setup(){  
+void setup(){
+  //set motor outputs
+  pinMode(motor1Pin, OUTPUT);
+  pinMode(motor2Pin, OUTPUT);
+  pinMode(motorPwmPin, OUTPUT);
+
   //debugging
   Serial.begin(9600);
 
@@ -107,9 +117,42 @@ void onRising5(void) {
 }
 
 
+//use a standard motor controller to control the dc motors using pwm and direction pins
+void drive(int motor1, int motor2){
+  
+  //motor1
+  if(motor1 < 0)
+  {
+    digitalWrite(7, LOW);
+    analogWrite(9, -motor1);
+  }
+  else
+  {
+    digitalWrite(7, HIGH);
+    analogWrite(9, motor1);
+  }
+
+  //motor 2
+  if (motor2 < 0)
+  {
+    digitalWrite(8, LOW);
+    analogWrite(9, -motor2);
+  }
+  else
+  {
+    digitalWrite(8, HIGH);
+    analogWrite(9, motor2);
+  }
+
+}
+
+
 
 
 void loop(){
+
+  //read pwm pulse width.
+  
   
   /*
     Here modify ppm array and set any channel to value between 1000 and 2000. 
