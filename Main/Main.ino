@@ -7,11 +7,12 @@
 #define motor2_pwm 11
 
 //pwm read pins
-#define pwm1_pin A0
-#define pwm2_pin A1
-#define pwm3_pin A2
-#define pwm4_pin A3
-#define pwm5_pin A4
+#define pwm1_pin A0 //radio ch 1
+#define pwm2_pin A1 //radio ch 2
+#define pwm3_pin A2 //radio ch 3
+#define pwm4_pin A3 //radio ch 4
+#define pwm5_pin A4 //radio ch 5
+
 int lastPwm[] = {0, 0, 0, 0, 0};
 
 void setup()
@@ -34,25 +35,29 @@ void setup()
 
 int pwmRead(int pin)
 {
+    //read pwm pulse width for each pin
     int pwm = 0;
     switch (pin)
     {
     case 0:
-        pwm = analogRead(pwm1_pin);
+        //measure pulse length
+        pwm = pulseIn(pwm1_pin, HIGH, 1000000);
         break;
     case 1:
-        pwm = analogRead(pwm2_pin);
+        pwm = pulseIn(pwm2_pin, HIGH, 1000000);
         break;
     case 2:
-        pwm = analogRead(pwm3_pin);
+        pwm = pulseIn(pwm3_pin, HIGH, 1000000);
         break;
     case 3:
-        pwm = analogRead(pwm4_pin);
+        pwm = pulseIn(pwm4_pin, HIGH, 1000000);
         break;
     case 4:
-        pwm = analogRead(pwm5_pin);
+        pwm = pulseIn(pwm5_pin, HIGH, 1000000);
         break;
     }
+
+    
     //some basic smoothing
     if (pwm > lastPwm[pin])
     {
@@ -62,7 +67,26 @@ int pwmRead(int pin)
     {
         pwm = lastPwm[pin] - (lastPwm[pin] - pwm) / 2;
     }
+
+    //check if pwm is within range of 1000-2000
+    if (pwm < 1000)
+    {
+        pwm = 1000;
+    }
+    else if (pwm > 2000)
+    {
+        pwm = 2000;
+    }
+    
     lastPwm[pin] = pwm;
+
+    //implement deadzone around centre
+    int deadzone = 100;
+    if (pwm < 1500 + deadzone && pwm > 1500 - deadzone)
+    {
+        pwm = 1500;
+    }
+
     //map to more readable range
     pwm = map(pwm, 1000, 2000, -255, 255);
     return pwm;
