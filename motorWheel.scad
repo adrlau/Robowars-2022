@@ -5,6 +5,7 @@ motorShaftDiameter = 2.02+0.5; // ignore offset just precise for press fit.
 tireWidth = width-width*0.2; //width of tire
 tireDepth = 1.5; //depth of tire
 
+//so that the wheel is a bit further away from the motor
 wheelOffset = 22; //debt of ofset from motor shaft to wheel
 offsetDiampeter = 20; //thickness for offset from motor shaft to wheel
 
