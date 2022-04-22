@@ -247,7 +247,8 @@ void fish(){
     digitalWrite(Left, HIGH);
     digitalWrite(Right, LOW);
     digitalWrite(led, HIGH);
-    delay(shift);    digitalWrite(Left, LOW);
+    delay(shift);    
+    digitalWrite(Left, LOW);
     digitalWrite(Right, LOW);
     digitalWrite(led, LOW);
     delay(t);    digitalWrite(Left, LOW);
