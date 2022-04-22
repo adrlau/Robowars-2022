@@ -105,14 +105,14 @@ void loop() {
         fish();
     }else{
         digitalWrite(led, HIGH);
+        //pump
+        if (pwmRead(1) > 100 || pwmRead(1) < -100){
+            digitalWrite(pump, HIGH);
+        }else{
+            digitalWrite(pump, LOW);
+        }
     }
 
-    //pump
-    if (pwmRead(1) > 100 || pwmRead(1) < -100){
-        digitalWrite(pump, HIGH);
-    }else{
-        digitalWrite(pump, LOW);
-    }
     
 
     //drive
