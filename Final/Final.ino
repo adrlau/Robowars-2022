@@ -101,16 +101,26 @@ void setup() {
 
 void loop() {
     //only flap fish if switch is flipped (can be changed to depend on throttle)
-    if (pwmRead(0) > 0){
+    int read2 = pwmRead(2);
+    int read1 = pwmRead(1);
+
+    if (read2 > -100){
+        shift = map(read2, -100, 255, 200, 50);
         fish();
-    }else{
-        digitalWrite(led, HIGH);
-        //pump
-        if (pwmRead(1) > 100 || pwmRead(1) < -100){
+        //migth/migth not work
+        if (read1 > 40 || read1 < -40){
             digitalWrite(pump, HIGH);
         }else{
             digitalWrite(pump, LOW);
-        }
+        } 
+    }else{
+        digitalWrite(led, HIGH);
+        //pump
+        if (read1 > 40 || read1 < -40){
+            digitalWrite(pump, HIGH);
+        }else{
+            digitalWrite(pump, LOW);
+        } 
     }
 
     
@@ -167,7 +177,9 @@ int pwmRead(int pin)
     //check if pwm is within range of 1100-1900
     if (pwm < 1100)
     {
-        pwm = 1100;
+        //transmitter is probably not connected
+        pwm = 0;
+        return pwm; //return 0 if transmitter is not connected 
     }
     else if (pwm > 1900)
     {
